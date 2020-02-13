@@ -31,7 +31,7 @@ class PodElement():
 
         #filename and url
         self.filename = rem.group(1).strip()
-        self.url = config["url"] + self.filename
+        self.url = config["ext_url"] + self.filename
 
         # extract the date
         date_str = rem.group(3).strip()
@@ -63,11 +63,12 @@ def read_config():  # reads the config file and set the global variable
             config = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
             print(exc)
+    config["feedfile"] = os.path.abspath(os.path.expanduser(config["feedfile"]))
 
 def write_sample_config():
     global config
     config = dict()
-    config["url"]="http://www.alximedia.de/radio/"
+    config["ext_url"]="http://www.alximedia.de/radio/"
     config["feedfile"]="~/radio_darc_feed.rss"
     config["download"]=False
     config["url_feed"]="localhost"
@@ -83,9 +84,9 @@ def CreateElements():
     global config
     global PodElements
     #read the webside
-    print("Reading website %s" % (config["url"]))
+    print("Reading website %s" % (config["ext_url"]))
     try:
-        f = urllib.request.urlopen(config["url"])
+        f = urllib.request.urlopen(config["ext_url"])
     except urllib.error.URLError as e:
         if hasattr(e, "code"):
             print("Opening the webside failed with the following code: %s" % (e.code))
@@ -110,6 +111,19 @@ def CreateFeed():
 
     for elem in PodElements:
         podcastitems.append(elem.GetFeedItem())
+
+    feed = Feed(
+        title="Radio DARC Podcast",
+        link=config["url_feed"],
+        description="Radio DARC recordings",
+        language="de-DE",
+        lastBuildDate=datetime.datetime.now(),
+        items=podcastitems)
+
+    fh = open(config["feedfile"], "w")
+    fh.write(feed.rss())
+    fh.close()
+
 
 
 

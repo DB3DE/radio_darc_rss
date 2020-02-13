@@ -1,4 +1,4 @@
 download: false
 feedfile: ~/radio_darc_feed.rss
-url: http://www.alximedia.de/radio/
-url_feed: localhost
+ext_url: http://www.alximedia.de/radio/
+url_feed: http://localhost/radio_darc_feed.rss
