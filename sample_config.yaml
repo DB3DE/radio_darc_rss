@@ -1,0 +1,4 @@
+download: false
+feedfile: ~/radio_darc_feed.rss
+url: http://www.alximedia.de/radio/
+url_feed: localhost
