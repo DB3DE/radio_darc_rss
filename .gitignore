@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 *.rss
-
+*~
 # Distribution / packaging
 .Python
 build/
