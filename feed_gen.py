@@ -42,6 +42,13 @@ class PodElement():
         self.title = "Radio DARC "+transmission
         self.description = "Radio DARC " + transmission + " from " + date_str
 
+    def GetFeedItem(self):
+        return Item(
+            title=self.title,
+            link=self.url,
+            description=self.description,
+            pubDate=self.pubDate)
+
 
 
 def read_config():  # reads the config file and set the global variable
@@ -92,15 +99,24 @@ def CreateElements():
     for line in str(website).split("<br>"):
         if str(line).find(".mp3\">RADIO DARC") != -1:
             PodElements.append(PodElement(line))
+            PodElements[-1].ExtractData()
+
+
+def CreateFeed():
+    global config
+    global PodElements
+
+    podcastitems = list()
+
+    for elem in PodElements:
+        podcastitems.append(elem.GetFeedItem())
+
 
 
 def main():
     read_config()
     CreateElements()
-
-    for elem in PodElements:
-        elem.ExtractData()
-
+    CreateFeed()
 
 
 if __name__ == '__main__':
