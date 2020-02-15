@@ -16,4 +16,10 @@ Apple nutzt in iTunes (mal wieder) eigene Formaterweitungen. Es steht mir kein i
 Eine sehr gute kompatibe App für Android ist "Podcast addict" https://play.google.com/store/apps/details?id=com.bambuna.podcastaddict&hl=de
 
 
+## Installation
+1) checkout des Projektes
+2) copy von sample_config.yaml nach ~/radio_darc_feedgen.yaml
+3) edit ~/radio_darc_feedgen.yaml
+4) run mit >python feed_gen.py
+
 
