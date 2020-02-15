@@ -2,8 +2,8 @@ import datetime
 import os
 import re
 import urllib
-
 import yaml
+import requests
 
 from lib.rfeed import *
 
@@ -17,6 +17,7 @@ class PodElement():
     """
 
     def __init__(self, sRawline):
+        global config
         self.__sRasline = sRawline
 
         self.title = None  # Title of this podcast issue
@@ -24,6 +25,9 @@ class PodElement():
         self.url = None  # url of ths podcast issue
         self.description = None
         self.pubDate = None
+
+        self.config = config
+        self.available_local = False
 
     def ExtractData(self):
         # print(self.__sRasline)
@@ -42,6 +46,12 @@ class PodElement():
         self.title = "Radio DARC " + transmission
         self.description = "Radio DARC " + transmission + " from " + date_str
 
+
+        if self.config["local_store"] != "":
+            if os.path.exists(os.path.abspath(os.path.expanduser(self.config["local_store"])) + "/" + self.filename):
+                self.available_local = True
+
+
     def GetFeedItem(self):
         return Item(
             title=self.title,
@@ -49,6 +59,15 @@ class PodElement():
             description=self.description,
             pubDate=self.pubDate)
 
+    def download_item(self):
+        '''
+        downloads an item to the destination configured in the config
+        '''
+        print("Downloading " + self.url + ": ",end='',flush=True)
+        dst = os.path.abspath(os.path.expanduser(self.config["local_store"])) + "/" + self.filename  #destination filename
+        r = requests.get(self.url, allow_redirects=True)
+        open(dst, 'wb').write(r.content)
+        print("Done")
 
 def read_config():  # reads the config file and set the global variable
     global config
@@ -72,6 +91,7 @@ def write_sample_config():
     config["feedfile"] = "~/radio_darc_feed.rss"
     config["download"] = False
     config["url_feed"] = "localhost"
+    config["local_store"] = "~/Musik/radio_darc"
     sAbs_sPATH_CONFIG_FILE = os.path.abspath(os.path.expanduser(sPATH_CONFIG_FILE))
 
     with open("sample_config.yaml", 'w') as file:
@@ -111,6 +131,11 @@ def CreateFeed():
 
     for elem in PodElements:
         podcastitems.append(elem.GetFeedItem())
+
+    if config["download"] == True:
+        for elem in PodElements:
+            if elem.available_local == False:
+                elem.download_item()
 
     feed = Feed(
         title="Radio DARC Podcast",

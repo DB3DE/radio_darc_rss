@@ -6,8 +6,14 @@ Die Datenquelle mit den Radio DARC Aufnahmen ist hier zu finden: http://www.alxi
 
 Zum erstellen des Feeds wird die Library rfeed von genutzt: https://github.com/svpino/rfeed.git
 
-This Python project uses PyCharm as a IDE (https://www.jetbrains.com/pycharm/)
+Die genutzte Python IDE ist pycharm(https://www.jetbrains.com/pycharm/)
 
+
+Bekannte Limitierungen: Der Erzeugte RSS feed kann nicht durch Itunes eingelesen werden.
+Apple nutzt in iTunes (mal wieder) eigene Formaterweitungen. Es steht mir kein iTunes zur Verfügung - daher wird iTunes Unterstützung mit hoher Wahrscheinlichkeit nicht eingebaut.
+
+
+Eine sehr gute kompatibe App für Android ist "Podcast addict" https://play.google.com/store/apps/details?id=com.bambuna.podcastaddict&hl=de
 
 
 
